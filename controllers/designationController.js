@@ -53,7 +53,6 @@ const updateDesign = async(req,res)=>{
             description,
             status,
         },{new:true});
-        await updated.save()
         res.status(200).json({result:updated});
     }catch(error){
         res.status(500).json({message:error.message});

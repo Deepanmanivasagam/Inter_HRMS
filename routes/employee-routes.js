@@ -10,6 +10,7 @@ const router = express.Router();
 const verifiedToken = require('../middleware/authmiddleware');
 const {addDepartment, getDept, getsingleDept, updateDepartment, deleteId} = require('../controllers/departmentController');
 const { createDesignation,getallId,getsingleId, updateDesign, deleteDesign } = require('../controllers/designationController');
+const { addProject, getProject, updateProject, deleteProject } = require('../controllers/projectController');
 
 // Employee routes
 
@@ -42,5 +43,12 @@ router.post('/getallDesign',verifiedToken,getallId);
 router.post('/getsingleDesign',verifiedToken,getsingleId,);
 router.post('/updateDesign/:id',verifiedToken,updateDesign);
 router.post('/deleteDesing',verifiedToken,deleteDesign);
+
+// Project
+
+router.post('/addproject',verifiedToken,addProject);
+router.post('/getproject/:id',verifiedToken,getProject);
+router.post('/updateproject/:id',verifiedToken,updateProject);
+router.post('/deleteproject',verifiedToken,deleteProject)
 
 module.exports = router;

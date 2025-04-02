@@ -4,25 +4,26 @@ const User = require('../model/register')
 const Employee = require('../model/employee');
 
 const applyLeave = async(req,res)=>{
-  try {
+  try{
       const {type,FromDate,ToDate,halfDayLeave,reason} = req.body;
 
-      const leaveTypes = ['Medical_Leave', 'Casual_Leave', 'Annual_Leave'];
-      if (!leaveTypes.includes(type)) {
-          return res.status(400).json({ message: 'Invalid leave type' });
+      const leaveTypes = ['Medical_Leave','Casual_Leave','Annual_Leave'];
+      if(!leaveTypes.includes(type)){
+          return res.status(400).json({message:'Invalid leave type'});
       }
 
-      const fromDate = moment(FromDate, 'DD-MM-YYYY').toDate();
-      const toDate = moment(ToDate, 'DD-MM-YYYY').toDate();
+      const fromDate = moment(FromDate,'DD-MM-YYYY').startOf('day').format('YYYY-MM-DD');
+      const toDate = moment(ToDate,'DD-MM-YYYY').startOf('day').format('YYYY-MM-DD');
 
       const user = await User.findById(req.user.id);
       if(!user){
           return res.status(404).json({message:"User not found"});
       }
-      const difference = (toDate-fromDate)/(1000*60*60*24);
-      const fullDayLeave = Math.floor(difference)+1;
-      const totalDays = fullDayLeave+(halfDayLeave*0.5);
-      const totalHours = (fullDayLeave*8)+(halfDayLeave*4);
+
+      const difference = moment(toDate).diff(moment(fromDate),'days');
+      const fullDayLeave = Math.max(difference + 1, 0);
+      const totalDays = fullDayLeave + (halfDayLeave * 0.5);
+      const totalHours = (fullDayLeave * 8) + (halfDayLeave * 4);
 
       const leaveRequest = new LeaveRequest({
           userId: req.user.id,
@@ -42,8 +43,8 @@ const applyLeave = async(req,res)=>{
           totalHours
       });
 
-  } catch (error) {
-      res.status(500).json({ message: 'Server error', error: error.message });
+  }catch(error){
+      res.status(500).json({message:'Server error',error:error.message});
   }
 };
 
