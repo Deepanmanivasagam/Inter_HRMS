@@ -5,12 +5,12 @@ const addProject = async(req,res)=>{
     try{
         const {projectName,teamMembers,startDate,endDate} = req.body;
 
-        const formattedStartDate = moment(startDate, 'DD-MM-YYYY').toDate();
-        const formattedEndDate = moment(endDate, 'DD-MM-YYYY').toDate();
+        const formattedStartDate = moment.utc(startDate, 'DD-MM-YYYY').startOf('day').toDate();
+        const formattedEndDate = moment.utc(endDate, 'DD-MM-YYYY').startOf('day').toDate();
 
         const dueDays = moment(formattedEndDate).diff(moment(formattedStartDate),'days');
 
-        const today = moment().startOf('day');
+        const today = moment.utc().startOf('day');
         console.log(today)
         const overdueDays = today.isAfter(formattedEndDate) ?today.diff(moment(formattedEndDate),'days') :0;
 
@@ -22,9 +22,7 @@ const addProject = async(req,res)=>{
             dueDays,
             overdueDays
         });
-
         await newProject.save();
-        
         res.status(200).json({message:"Project added successfully",newProject});
     }catch(error){
         res.status(400).json({message:error.message});
@@ -34,13 +32,10 @@ const addProject = async(req,res)=>{
 const getProject = async(req,res)=>{
     try{
         const {id} = req.params;
-
         const project = await Project.findById(id).populate('teamMembers','userName');
-
         if(!project){
             return res.status(404).json({message:"Project not found"});
         }
-
         res.status(200).json({project});
     }catch(error){
         res.status(400).json({message:error.message});
