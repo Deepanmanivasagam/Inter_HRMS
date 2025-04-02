@@ -10,7 +10,7 @@ const router = express.Router();
 const verifiedToken = require('../middleware/authmiddleware');
 const {addDepartment, getDept, getsingleDept, updateDepartment, deleteId} = require('../controllers/departmentController');
 const { createDesignation,getallId,getsingleId, updateDesign, deleteDesign } = require('../controllers/designationController');
-const { addProject, getProject, updateProject, deleteProject } = require('../controllers/projectController');
+const {addProject,getProject,updateProject,deleteProject} = require('../controllers/projectmodelController');
 
 // Employee routes
 
