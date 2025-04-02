@@ -47,6 +47,15 @@ const getProject = async(req,res)=>{
     }
 };
 
+const getallProject = async(req,res)=>{
+    try{
+    const allProject = await Project.find().populate('teamMembers','userName');
+    res.status(200).json({message:"All Projects fetched",allProject});
+}catch(error){
+    res.status(400).json({message:error.message});
+}
+}
+
 const updateProject = async(req,res)=>{
     try{
         const {id} = req.params;
@@ -99,6 +108,7 @@ const deleteProject = async(req,res)=>{
 module.exports = { 
     addProject,
     getProject,
+    getallProject,
     updateProject,
     deleteProject
 };
