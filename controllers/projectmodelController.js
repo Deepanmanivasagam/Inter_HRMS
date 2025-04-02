@@ -66,9 +66,7 @@ const updateProject = async(req,res)=>{
 
         const dueDays = moment(formattedEndDate).diff(moment(formattedStartDate),'days');
         const today = moment().format('YYYY-MM-DD');
-        const overdueDays = moment(today).isAfter(formattedEndDate)
-            ? moment(today).diff(moment(formattedEndDate), 'days')
-            : 0;
+        const overdueDays = moment(today).isAfter(formattedEndDate) ?moment(today).diff(moment(formattedEndDate), 'days') :0;
 
         const updatedProject = await Project.findByIdAndUpdate(id,
             {
