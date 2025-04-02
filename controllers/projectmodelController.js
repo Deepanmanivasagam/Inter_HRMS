@@ -11,7 +11,8 @@ const addProject = async(req,res)=>{
         const dueDays = moment(formattedEndDate).diff(moment(formattedStartDate),'days');
 
         const today = moment().startOf('day');
-        const overdueDays = today.isAfter(formattedEndDate) ?today.diff(moment(formattedEndDate),'days') : 0;
+        console.log(today)
+        const overdueDays = today.isAfter(formattedEndDate) ?today.diff(moment(formattedEndDate),'days') :0;
 
         const newProject = new Project({
             projectName,
@@ -24,7 +25,7 @@ const addProject = async(req,res)=>{
 
         await newProject.save();
         
-        res.status(201).json({message:"Project added successfully",newProject});
+        res.status(200).json({message:"Project added successfully",newProject});
     }catch(error){
         res.status(400).json({message:error.message});
     }
